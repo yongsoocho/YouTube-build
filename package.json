@@ -1,0 +1,24 @@
+{
+  "name": "youtube-build",
+  "version": "1.0.0",
+  "description": "Nuxt.js / Node.js / Mongo",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://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@github.com/yongsoocho/YouTube-build.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/yongsoocho/YouTube-build/issues"
+  },
+  "homepage": "https://github.com/yongsoocho/YouTube-build#readme",
+  "dependencies": {
+    "@vue/cli": "^4.5.12",
+    "nuxt": "^2.15.4",
+    "vue": "^2.6.12"
+  }
+}
