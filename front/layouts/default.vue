@@ -35,11 +35,12 @@
 						  light
 						  outlined
 						  label="search"
+						  v-model="searchOn"
 						  >
 			</v-text-field>
 			<v-btn
 				   icon
-				   color="grey"
+				   :color="searchBtn"
 				   :style="{ marginLeft:'3px' }"
 				   >
 				<v-icon>mdi-magnify</v-icon>
@@ -84,6 +85,7 @@
 	</v-app-bar>
 	
 	<v-navigation-drawer 
+						 class="hidden-sm-and-down"
 						 app
 						 clipped
 						 :mini-variant.sync="drawer"
@@ -150,7 +152,7 @@
 						   tile
 						   outlined
 						   color="blue"
-					   to="signIn"
+					   	   to="signIn"
 						   >
 						<v-avatar
 								  color="blue"
@@ -245,7 +247,7 @@
 				elevation="0"
 				class="white grey--text" 
 				v-if="!drawer"
-				:style="{ margin:'0px 5px' }"
+				:style="{ margin:'3px 5px' }"
 				>
 			©YouTube, clone-coding project<br/>
 			Build, by Cho yongsoo<br/>
@@ -253,7 +255,7 @@
 		</v-card>
 	</v-navigation-drawer>
 	
-	<v-main>
+	<v-main class="grey lighten-4">
 		<Nuxt />
 	</v-main>
 </v-app>
@@ -265,7 +267,17 @@
 	export default Vue.extend({
 		data() {
 			return {
-				drawer: true
+				drawer: true,
+				searchOn: ''
+			}
+		},
+		computed:{
+			searchBtn() {
+				if(this.searchOn) {
+					return 'blue'
+				} else {
+					return 'grey'
+				}
 			}
 		}
 	});
@@ -274,5 +286,8 @@
 <style scoped>
 	#link {
 		text-decoration:none;
+	}
+	.searchBtn {
+		color: blue;
 	}
 </style>
