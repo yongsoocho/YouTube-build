@@ -35,13 +35,14 @@
 						  light
 						  outlined
 						  label="search"
-						  v-model="searchOn"
+						  v-model="searchText"
 						  >
 			</v-text-field>
 			<v-btn
 				   icon
 				   :color="searchBtn"
 				   :style="{ marginLeft:'3px' }"
+				   @click="onClickSearch"
 				   >
 				<v-icon>mdi-magnify</v-icon>
 			</v-btn>
@@ -255,7 +256,7 @@
 		</v-card>
 	</v-navigation-drawer>
 	
-	<v-main class="grey lighten-4">
+	<v-main class="grey lighten-5">
 		<Nuxt />
 	</v-main>
 </v-app>
@@ -268,17 +269,24 @@
 		data() {
 			return {
 				drawer: true,
-				searchOn: ''
+				searchText: ''
 			}
 		},
-		computed:{
+		computed: {
 			searchBtn() {
-				if(this.searchOn) {
+				if(this.searchText) {
 					return 'blue'
 				} else {
 					return 'grey'
 				}
 			}
+		},
+		methods: {
+			onClickSearch() {	// change axios
+				this.$router.push({
+					path:`/search`
+				});
+			},
 		}
 	});
 </script>
