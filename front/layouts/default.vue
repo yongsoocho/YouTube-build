@@ -7,6 +7,7 @@
 			   color="white"
 			   >
 			<v-app-bar-nav-icon 
+								class="hidden-sm-and-down"
 								@click.stop="drawer = !drawer"
 								color="grey">
 			</v-app-bar-nav-icon>
@@ -25,7 +26,7 @@
 				</NuxtLink>
 			</v-app-bar-title>
 			
-			<v-spacer></v-spacer>
+			<v-spacer class="hidden-sm-and-down"></v-spacer>
 			
 			<v-text-field
 						  single-line
@@ -50,6 +51,7 @@
 			<v-spacer></v-spacer>
 			
 			<v-btn
+				   class="hidden-sm-and-down"
 				   text
 				   icon
 				   color="grey"
@@ -57,6 +59,7 @@
 				<v-icon>mdi-apps</v-icon>
 			</v-btn>
 			<v-btn
+				   class="hidden-sm-and-down"
 				   text
 				   icon
 				   color="grey"
@@ -86,6 +89,7 @@
 	</v-app-bar>
 	
 	<v-navigation-drawer 
+						 id="scrollBar"
 						 class="hidden-sm-and-down"
 						 app
 						 clipped
@@ -264,6 +268,7 @@
 
 <script lang="ts">
 	import Vue from "vue";
+	import { PerfectScrollbar } from 'vue2-perfect-scrollbar'
 	
 	export default Vue.extend({
 		data() {
@@ -272,6 +277,11 @@
 				searchText: ''
 			}
 		},
+		
+		components: {
+			
+		},
+		
 		computed: {
 			searchBtn() {
 				if(this.searchText) {
@@ -281,6 +291,7 @@
 				}
 			}
 		},
+		
 		methods: {
 			onClickSearch() {	// change axios
 				this.$router.push({

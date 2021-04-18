@@ -53,6 +53,7 @@
 				text2: text2
 			}
 		},
+		
 		components: {
 			VideoCard
 		}

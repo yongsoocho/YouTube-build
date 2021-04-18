@@ -43,31 +43,37 @@
 										  :style="{ marginBottom:'10px' }"
 										  >
 							</v-text-field>
+							<v-text-field
+										  label="password check"
+										  clearable
+										  type="password"
+										  :style="{ marginBottom:'10px' }"
+										  >
+							</v-text-field>
+							<v-text-field
+										  label="name"
+										  clearable
+										  type="text"
+										  :style="{ marginBottom:'10px' }"
+										  >
+							</v-text-field>
 							<v-btn
 								   dark
 								   block
 								   color="blue"
 								   :style="{ margin:'10px 0px' }"
 								   >
-								Log in
+								Signup
 							</v-btn>
 							<v-btn
-								   dark
-								   block
-								   color="#E53935"
-								   >
-								<v-icon dense>mdi-google</v-icon>
-								&nbsp;Google
-							</v-btn>
-							<v-btn
-								   to="/signUp"
+								   to="/signIn"
 								   nuxt
 								   light
 								   color="blue"
 								   text
 								   :style="{ marginTop:'30px' }"
 								   >
-								Create Account<v-icon dense>mdi-open-in-new</v-icon>
+								Back to Login<v-icon dense>mdi-open-in-new</v-icon>
 							</v-btn>
 						</v-container>
 					</v-card>
