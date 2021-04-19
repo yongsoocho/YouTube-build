@@ -74,7 +74,7 @@
 				<p v-show="descriptToggle" class="black--text">
 					{{description}}
 				</p>
-				<v-btn color="blue" small text tile @click="onClickDescriptToggle">show more</v-btn>
+				<v-btn color="blue" small text tile @click="onClickDescriptToggle" :style="{ marginBottom:'20px' }">show more</v-btn>
 			</div>
 			<!-- -->
 			<v-divider color="#E0E0E0"></v-divider>
@@ -85,7 +85,9 @@
 		</v-container>
 	</v-col>
 	
-	<v-col cols="12" md="3" class="hidden-sm-and-down"></v-col>
+	<v-col cols="12" md="3" class="hidden-sm-and-down">
+		<VideoColumn :videoList="test"></VideoColumn>
+	</v-col>
 </v-row>
 </template>
 
@@ -93,11 +95,13 @@
 	import Vue from "vue";
 	import CommentPost from "@/components/commentPost.vue";
 	import CommentCard from "@/components/commentCard.vue";
+	import VideoColumn from "@/components/videoColumn.vue";
 	
 	export default Vue.extend({
 		components: {
 			CommentPost,
-			CommentCard
+			CommentCard,
+			VideoColumn
 		},
 		
 		data() {
