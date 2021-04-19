@@ -16,32 +16,31 @@
 			</div>
 			<span class="black--text">Text Content</span>
 			<div>
-				<v-btn-toggle>
-					<v-btn>Like 100</v-btn>
-					<v-btn>Dislike 2</v-btn>
-				</v-btn-toggle>
-			</div>
+					<v-btn small fab text :class="{ likeToggleBlue:true, likeToggleGrey:false }">
+						<v-icon small>mdi-thumb-up</v-icon>
+					</v-btn><span :class="{ likeToggleBlue:true, likeToggleGrey:false }">13K</span>
+					<span>&nbsp;&nbsp;</span>
+					<v-btn small fab text :class="{ likeToggleBlue:false, likeToggleGrey:true }">
+						<v-icon small>mdi-thumb-down</v-icon>
+					</v-btn><span :class="{ likeToggleBlue:false, likeToggleGrey:true }">1K</span>
+				</div>
 			<!-- -->
-			<v-expansion-panels>
-				<v-expansion-panel>
-					<v-expansion-panel-header>
-						<v-btn
-							   color="blue"
-							   text
-							   >
-							View replies
-						</v-btn>
-       				</v-expansion-panel-header>
-					<v-expansion-panel-content>
-         				<CommentReplies
-										:style="{ marginLeft:'49px' }"
-										v-for="t of replies"
-										:key="t"
-										>
-						</CommentReplies>
-       				</v-expansion-panel-content>
-				</v-expansion-panel>
-			</v-expansion-panels>
+				<v-btn
+					   tile
+					   small
+					   color="blue"
+					   text
+					   @click="onClickOpenReplies"
+					   >
+					View replies
+				</v-btn>
+        		<CommentReplies
+								v-if="repliesToggle"
+								:style="{ marginLeft:'49px', marginTop:'10px' }"
+								v-for="t of replies"
+								:key="t"
+								>
+				</CommentReplies>
 			<!-- -->
 		</div>
 	</div>
@@ -56,7 +55,7 @@
 	export default Vue.extend({
 		props:{
 			Comments:{
-				type: Object
+				type: Object,
 			}	
 		},
 		
@@ -67,10 +66,29 @@
 		data() {
 			return {
 				replies:this.Comments.replies,
+				repliesToggle: false
+			}
+		},
+		
+		methods: {
+			onClickOpenReplies() {
+				if(!this.repliesToggle) {
+					return this.repliesToggle = true;
+				} else {
+					return this.repliesToggle = false;
+				}
 			}
 		}
 	});
 </script>
 
 <style scoped>
+	.likeToggleBlue {
+		color:#2196F3;
+		font-size:15px;
+	}
+	.likeToggleGrey {
+		color:#9E9E9E;
+		font-size:15px;
+	}
 </style>

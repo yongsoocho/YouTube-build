@@ -15,10 +15,13 @@
 			</div>
 			<span class="black--text">Text Content</span>
 			<div>
-				<v-btn-toggle>
-					<v-btn>Like 100</v-btn>
-					<v-btn>Dislike 2</v-btn>
-				</v-btn-toggle>
+				<v-btn x-small fab text :class="{ likeToggleBlue:true, likeToggleGrey:false }">
+						<v-icon x-small>mdi-thumb-up</v-icon>
+				</v-btn><span :class="{ likeToggleBlue:true, likeToggleGrey:false }">13K</span>
+				<span>&nbsp;&nbsp;</span>
+				<v-btn x-small fab text :class="{ likeToggleBlue:false, likeToggleGrey:true }">
+					<v-icon x-small>mdi-thumb-down</v-icon>
+				</v-btn><span :class="{ likeToggleBlue:false, likeToggleGrey:true }">1K</span>
 			</div>
 		</div>
 	</div>
@@ -33,4 +36,12 @@
 </script>
 
 <style scoped>
+	.likeToggleBlue {
+		color:#2196F3;
+		font-size:14px;
+	}
+	.likeToggleGrey {
+		color:#9E9E9E;
+		font-size:14px;
+	}
 </style>

@@ -1,5 +1,5 @@
 <template>
-	<div :style="{ display:'flex' }">
+	<div :style="{ display:'flex', alignItems:'center' }">
 		<div>
 			<v-avatar
 					  color="red"
@@ -7,8 +7,9 @@
 					  >
 			</v-avatar>
 		</div>
-		<div>
+		<div :style="{ width:'80%' }">
 			<v-text-field
+						  :style="{ marginLeft:'10px' }"
 						  light
 						  placeholder="Add a public comment..."
 						  clearable
@@ -18,6 +19,7 @@
 		</div>
 		<div>
 			<v-btn
+				   :style="{ marginLeft:'50px' }"
 				   v-show="commentText"
 				   dark
 				   tile
