@@ -66,5 +66,16 @@ export default {
   server: {
 	port: 3000,
     host: '0.0.0.0'
+  },
+  pageTransition: {
+    name: 'page',
+    mode: 'out-in',
+    beforeEnter (el) {
+      console.log(`Before enter...${el}`);
+ 	}
+  },
+  layoutTransition: {
+    name: 'layout',
+    mode: 'out-in'
   }
 }

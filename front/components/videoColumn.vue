@@ -19,7 +19,7 @@
 <script lang="ts">
 	import Vue from 'vue';
 	
-	export default (Vue as VueConstructor<Vue & { $refs: { my: HTMLDivElement} }>).extend({
+	export default (Vue).extend({
 		props: {
 			videoList: {
 				type: Array
