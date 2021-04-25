@@ -67,12 +67,44 @@
 				<v-icon>mdi-dots-vertical</v-icon>
 			</v-btn>
 			<v-btn
+				   v-if="user"
+				   Nuxt
+				   to="/video/upload"
 				   large
 				   tile
 				   outlined
 				   color="blue"
-
-				   to="signIn"
+				   >
+				<v-icon large>mdi-video-plus</v-icon>
+				&nbsp;video upload
+			</v-btn>
+			<v-btn
+				   v-if="user"
+				   :style="{ margin:'0px 5px' }"
+				   text
+				   color="blue"
+				   tile
+				   large>
+				Profile
+			</v-btn>
+			<v-btn
+				   v-show="user"
+				   @click="onClickLogOut"
+				   text
+				   color="red"
+				   tile
+				   large>
+				Logout
+			</v-btn>
+			<v-btn
+				   nuxt
+				   to="/signIn"
+				   v-show="!user"
+				   large
+				   tile
+				   outlined
+				   color="blue"
+				   @click="onClickLogin"
 				   >
 				<v-avatar
 						  color="blue"
@@ -107,6 +139,15 @@
 			},
 			onClickDrawerToggle() {
 				EventBus.$emit('drawerToggle');
+			},
+			onClickLogin() {
+				return this.$store.dispatch('user/getUser', { info:'abc' });
+			},
+			onClickUploadVideo() {
+				this.$router.push('/video/upload')
+			},
+			onClickLogOut() {
+				return this.$store.dispatch('user/removeUser');
 			}
 		},
 		
@@ -117,6 +158,9 @@
 				} else {
 					return 'grey'
 				}
+			},
+			user() {
+				return this.$store.state.user.user;
 			}
 		},
 	});
