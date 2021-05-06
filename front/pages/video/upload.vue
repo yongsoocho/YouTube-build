@@ -30,33 +30,44 @@
 
 			  <v-stepper-items>
 				<v-stepper-content step="1">
-				  <v-card
-					color="white"
-					height="200px"
-					flat
-				  >
+				  <v-container>
+					<v-img src="https://t1.daumcdn.net/cfile/tistory/240814485574155029">
+					</v-img>
+				  </v-container>
+				  <v-container>
 					<v-form>
 						<v-btn
 							   fab
 							   outlined
 							   color="blue"
+							   @click="onClickUploadVideo"
 							   >
 							<v-icon large>mdi-video-plus</v-icon>
 						</v-btn>
-						<input type="file"/>
+						<v-btn
+							   fab
+							   outlined
+							   color="red"
+							   >
+							<v-icon large>mdi-video-off</v-icon>
+						</v-btn>
+						<input ref="inputVideo" type="file" accept="video/*" @input.stop="inputVideoFile" v-show="false"/>
 					</v-form>
-				  </v-card>
+				  </v-container>
 
-				  <v-btn
-					color="primary"
-					@click="e1 = 2"
-				  >
-					Continue
-				  </v-btn>
+				  <v-container>
+					  <v-btn
+						color="primary"
+						@click="e1 = 2"
+						:disabled="continueBtn"
+					  >
+						Continue
+					  </v-btn>
 
-				  <v-btn text>
-					Cancel
-				  </v-btn>
+					  <v-btn text>
+						Cancel
+					  </v-btn>
+				  </v-container>
 				</v-stepper-content>
 
 				<v-stepper-content step="2">
@@ -160,7 +171,8 @@
 				title:'',
 				description:'',
 				genre:'',
-				hashtag:''
+				hashtag:'',
+				continueBtn:true
     		}
   		},
 		
@@ -170,6 +182,14 @@
 			},
 			onClickHome() {
 				this.$router.push('/');
+			},
+			inputVideoFile(event) {
+				console.log(event.target.files);
+				this.continueBtn = false;
+			},
+			onClickUploadVideo() {
+				this.$refs.inputVideo.click();
+				console.log(this.$refs);
 			}
 		}
 	});

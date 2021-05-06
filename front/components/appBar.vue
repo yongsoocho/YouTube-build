@@ -84,7 +84,9 @@
 				   text
 				   color="blue"
 				   tile
-				   large>
+				   large
+				   @click="onClickProfile"
+				   >
 				Profile
 			</v-btn>
 			<v-btn
@@ -147,7 +149,11 @@
 				this.$router.push('/video/upload')
 			},
 			onClickLogOut() {
-				return this.$store.dispatch('user/removeUser');
+				this.$store.dispatch('user/removeUser');
+				return this.$router.push('/');
+			},
+			onClickProfile() {
+				this.$router.push('/user/123');
 			}
 		},
 		
