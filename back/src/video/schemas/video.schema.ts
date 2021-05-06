@@ -1,4 +1,5 @@
 import * as mongoose from 'mongoose';
+import { CommentSchema } from './comment.schema';
 
 export const VideoSchema = new mongoose.Schema({
 	
@@ -12,19 +13,37 @@ export const VideoSchema = new mongoose.Schema({
 		required: true
 	},
 	
-	author: UserSchema,
+	author: {
+		type: mongoose.Types.ObjectId, 
+		required:true, 
+		ref:'User'
+	},
 	
-	myVideo: [VideoSchema],
+	views: {
+		type: Number,
+		required: true,
+		default: 1
+	},
 	
-	favoriteVideo: [VideoSchema]
+	comments: [CommentSchema],
+	
+	likeUsers: [{
+		type: mongoose.Types.ObjectId,
+		ref: 'User'
+	}],
+	
+	dislikeUsers: [{
+		type: mongoose.Types.ObjectId,
+		ref: 'User'
+	}]
 	
 }, { timestamps:true });
 
 
-export interface IVideo = {
-	name:string;
-	email:string;
-	hash:string;
+export interface IVideo {
+	title:string;
+	description:string;
+	author:{ _id:string; name:string; };
 	myVideo:IVideo[];
 	favoriteVideo:Array<IVideo>;
 };

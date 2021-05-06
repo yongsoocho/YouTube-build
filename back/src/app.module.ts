@@ -5,13 +5,13 @@ import { GlobalModule } from './global/global.module';
 
 import { MongooseModule } from '@nestjs/mongoose';
 
-const MONGO_URL = 'mongodb+srv://admin:0302@cluster0.xgmno.mongodb.net/YouTube?retryWrites=true&w=majority'
+const URL = 'mongodb+srv://admin:0302@cluster0.xgmno.mongodb.net/test?retryWrites=true&w=majority'
 
 @Module({
   imports: [UserModule, 
-						VideoModule, 
+						VideoModule,
 						GlobalModule,
-						MongooseModule.forRoot(MONGO_URL)
+						MongooseModule.forRoot(URL, { autoIndex: false, useFindAndModify:false })
 					 ]
 })
 export class AppModule {}

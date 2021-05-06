@@ -1,4 +1,5 @@
 import * as mongoose from 'mongoose';
+import { IVideo, VideoSchema } from '../../video/schemas/video.schema';
 
 export const UserSchema = new mongoose.Schema({
 	
@@ -9,22 +10,31 @@ export const UserSchema = new mongoose.Schema({
 	
 	email: {
 		type: String,
-		required: true
+		required: true,
+		unique: true,
+		index: true
 	},
 	
-	hash: {
+	password: {
 		type: String,
 		required: true
 	},
 	
 	myVideo: [VideoSchema],
 	
-	favoriteVideo: [VideoSchema]
+	favoriteVideo: [VideoSchema],
+	
+	mySubscription: [{
+		_id: {
+			type: mongoose.Types.ObjectId,
+			ref:'User'
+		}
+	}]
 	
 }, { timestamps:true });
 
 
-export interface IUser = {
+export interface IUser {
 	name:string;
 	email:string;
 	hash:string;
