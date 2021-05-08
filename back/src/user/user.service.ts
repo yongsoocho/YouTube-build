@@ -1,8 +1,9 @@
-import { Injectable, HttpException } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, isValidObjectId } from 'mongoose';
 import { IUser, UserDocument } from './schemas/user.schema';
 import * as bcrypt from 'bcrypt';
+import * as jwt from 'jsonwebtoken';
 
 @Injectable()
 export class UserService {
@@ -56,7 +57,7 @@ export class UserService {
 		try {
 			const { email, name, password } = body;
 			const exUser = await this.userModel.findOne({ email: email }, { email: 1 });
-			if(exUser) { throw new HttpException("Already existing user", 400) };
+			if(exUser) { throw new UnauthorizedException('Try another email') };
 			const hash = await bcrypt.hash(password, 12);
 			const newUser = new this.userModel({
 				email,
@@ -75,10 +76,14 @@ export class UserService {
 		try{
 			const { email, password } = body;
 			const user = await this.userModel.findOne({ email: email });
-			if(!user) { throw new Error('email') };
+
+			if(!user) { return new UnauthorizedException('Check your email') };
+
 			const result = await bcrypt.compare(password, user.password);
-			if(!result) { throw new Error('pw') };
-			return console.log('login!');
+			if(!result) { return new UnauthorizedException('Check your password') };
+
+			const authJwtToken = jwt.sign({ email:user.email, name:user.name }, 'SecretKey');
+			return authJwtToken;
 		}catch(err) {
 			console.log(err);
 		}
