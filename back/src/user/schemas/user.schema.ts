@@ -37,7 +37,7 @@ export const UserSchema = new mongoose.Schema({
 export interface IUser {
 	name:string;
 	email:string;
-	hash:string;
+	password:string;
 	myVideo:IVideo[];
 	favoriteVideo:Array<IVideo>;
 };

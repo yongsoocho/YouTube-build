@@ -1,7 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, HttpException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, isValidObjectId } from 'mongoose';
 import { IUser, UserDocument } from './schemas/user.schema';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UserService {
@@ -55,11 +56,12 @@ export class UserService {
 		try {
 			const { email, name, password } = body;
 			const exUser = await this.userModel.findOne({ email: email }, { email: 1 });
-			if(exUser) { return console.log('existing user') };
+			if(exUser) { throw new HttpException("Already existing user", 400) };
+			const hash = await bcrypt.hash(password, 12);
 			const newUser = new this.userModel({
 				email,
 				name,
-				password
+				password: hash
 			});
 			await newUser.save();
 			return newUser;
@@ -71,7 +73,12 @@ export class UserService {
 	
 	async logIn(body): Promise<any> {
 		try{
-			console.log('login');
+			const { email, password } = body;
+			const user = await this.userModel.findOne({ email: email });
+			if(!user) { throw new Error('email') };
+			const result = await bcrypt.compare(password, user.password);
+			if(!result) { throw new Error('pw') };
+			return console.log('login!');
 		}catch(err) {
 			console.log(err);
 		}

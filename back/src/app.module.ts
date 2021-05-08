@@ -11,7 +11,10 @@ const URL = 'mongodb+srv://admin:0302@cluster0.xgmno.mongodb.net/test?retryWrite
   imports: [UserModule, 
 						VideoModule,
 						GlobalModule,
-						MongooseModule.forRoot(URL, { autoIndex: false, useFindAndModify:false })
+						MongooseModule.forRoot(URL, { 
+							useFindAndModify:false, 
+							useCreateIndex:true 
+						})
 					 ]
 })
 export class AppModule {}
