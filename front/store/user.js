@@ -1,22 +1,60 @@
 export const state = () => ({
+	
 	user: null
+	
 })
 
 export const mutations = {
-	GETUSER(state , payload) {
-		const { info } = payload;
-		state.user = info;
+	
+	LOGIN(state , payload) {
+		state.user = payload;
 	},
-	REMOVEUSER(state ) {
+	
+	LOGOUT(state) {
 		state.user = null;
-	}
+	},
 }
 
 export const actions = {
-	getUser({ commit }, payload) {
-		commit('GETUSER', payload);
+	
+	async postLogin({ commit }, payload) {
+		await this.$axios.post('/user/login', payload)
+		.then((res) => {
+			const jwtToken = res.data.jwt;
+			localStorage.setItem('Authorization', jwtToken);
+			commit('LOGIN', res.data);
+		})
+		.catch((err) => {
+			console.log(`postLogin Error: ${err}`);
+		})
 	},
-	removeUser({ commit }) {
-		commit('REMOVEUSER');
-	}
+	
+	async getLogout({ commit }) {
+		await this.$axios.get('/user/logout')
+		.then(() => {
+			localStorage.removeItem('Authorization');
+			commit('LOGOUT');
+		})
+		.catch((err) => {
+			console.log(`getLogout Error: ${err}`)
+		});
+	},
+	
+	async postSignUp({ commit, dispatch }, payload) {
+		const { email, password, name } = payload;
+		await this.$axios.post('/user/signup', {
+			email,
+			password,
+			name
+		})
+		.then(() => {
+			dispatch('postLogin', {
+				email,
+				password
+			})
+		})
+		.catch((err) => {
+			console.log(`postSignUp Error: ${err}`)
+		});
+	},
 }

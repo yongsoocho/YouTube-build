@@ -34,6 +34,7 @@
 										  label="Email"
 										  clearable
 										  type="text"
+											v-model="email"
 										  >
 							</v-text-field>
 							<v-text-field
@@ -41,6 +42,7 @@
 										  clearable
 										  type="password"
 										  :style="{ marginBottom:'10px' }"
+											v-model="password"
 										  >
 							</v-text-field>
 							<v-text-field
@@ -48,6 +50,7 @@
 										  clearable
 										  type="password"
 										  :style="{ marginBottom:'10px' }"
+											v-model="passwordCheck"
 										  >
 							</v-text-field>
 							<v-text-field
@@ -55,6 +58,7 @@
 										  clearable
 										  type="text"
 										  :style="{ marginBottom:'10px' }"
+											v-model="name"
 										  >
 							</v-text-field>
 							<v-btn
@@ -62,6 +66,7 @@
 								   block
 								   color="blue"
 								   :style="{ margin:'10px 0px' }"
+									 @click="onClickSignUp"
 								   >
 								Signup
 							</v-btn>
@@ -87,13 +92,42 @@
 
 <script lang="ts">
 	import Vue from "vue";
+	import { EventBus } from "../bus/bus.js";
 	
 	export default Vue.extend({
+		
 		data() {
 			return {
-				loading: 'false'	// change toggle blue, false
+				loading:EventBus.loading,
+				email:'',
+				password:'',
+				passwordCheck:'',
+				name:''
 			}
-		}
+		},
+		
+		methods: {
+			
+			onClickSignUp() {
+				EventBus.loading = true;
+				return this.$store.dispatch('user/postSignUp', {
+					email:this.email,
+					password:this.password,
+					name:this.name
+				})
+				.then(() => {
+					EventBus.loading = false;
+					this.$router.push('/')
+				})
+				.catch((err) => {
+					console.log(`onClickSignUp Error: ${err}`)
+				});
+			}
+			
+		},
+		
+		middleware:'isLogin'
+		
 	});
 </script>
 

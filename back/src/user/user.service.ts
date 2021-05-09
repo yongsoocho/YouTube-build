@@ -55,14 +55,14 @@ export class UserService {
 	
 	async signUp(body): Promise<any> {
 		try {
-			const { email, name, password } = body;
+			const { email, password, name } = body;
 			const exUser = await this.userModel.findOne({ email: email }, { email: 1 });
 			if(exUser) { throw new UnauthorizedException('Try another email') };
 			const hash = await bcrypt.hash(password, 12);
 			const newUser = new this.userModel({
 				email,
-				name,
-				password: hash
+				password: hash,
+				name
 			});
 			await newUser.save();
 			return newUser;
@@ -83,7 +83,9 @@ export class UserService {
 			if(!result) { return new UnauthorizedException('Check your password') };
 
 			const authJwtToken = jwt.sign({ email:user.email, name:user.name }, 'SecretKey');
-			return authJwtToken;
+			let data = { jwt:null };
+			data.jwt = authJwtToken;
+			return data;
 		}catch(err) {
 			console.log(err);
 		}

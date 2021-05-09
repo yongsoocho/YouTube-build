@@ -106,7 +106,6 @@
 				   tile
 				   outlined
 				   color="blue"
-				   @click="onClickLogin"
 				   >
 				<v-avatar
 						  color="blue"
@@ -134,23 +133,29 @@
 		},
 		
 		methods: {
+			
 			onClickSearch() {	// change axios
 				this.$router.push({
 					path:`/search`
 				});
 			},
+			
 			onClickDrawerToggle() {
 				EventBus.$emit('drawerToggle');
 			},
-			onClickLogin() {
-				return this.$store.dispatch('user/getUser', { info:'abc' });
-			},
+			
 			onClickUploadVideo() {
 				this.$router.push('/video/upload')
 			},
+			
 			onClickLogOut() {
-				this.$store.dispatch('user/removeUser');
-				return this.$router.push('/');
+				return this.$store.dispatch('user/getLogout')
+				.then(() => {
+					this.$router.push('/');
+				})
+				.catch((err) => {
+					console.log(`onClickLogOut Error: ${err}`)
+				})
 			},
 			onClickProfile() {
 				this.$router.push('/user/123');
@@ -158,6 +163,7 @@
 		},
 		
 		computed: {
+			
 			searchBtn() {
 				if(this.searchText) {
 					return 'blue'
@@ -165,10 +171,13 @@
 					return 'grey'
 				}
 			},
+			
 			user() {
 				return this.$store.state.user.user;
 			}
+			
 		},
+		
 	});
 </script>
 

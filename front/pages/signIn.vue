@@ -34,6 +34,7 @@
 										  label="Email"
 										  clearable
 										  type="text"
+											v-model="email"
 										  >
 							</v-text-field>
 							<v-text-field
@@ -41,6 +42,7 @@
 										  clearable
 										  type="password"
 										  :style="{ marginBottom:'10px' }"
+											v-model="password"
 										  >
 							</v-text-field>
 							<v-btn
@@ -48,6 +50,7 @@
 								   block
 								   color="blue"
 								   :style="{ margin:'10px 0px' }"
+									 @click="onClickLogin"
 								   >
 								Log in
 							</v-btn>
@@ -81,13 +84,39 @@
 
 <script lang="ts">
 	import Vue from "vue";
+	import { EventBus } from "../bus/bus.js";
 	
 	export default Vue.extend({
+		
 		data() {
 			return {
-				loading: 'false'	// change toggle blue, false
+				loading: EventBus.loading,
+				email:'',
+				password:''
 			}
+		},
+		
+		methods: {
+			onClickLogin() {
+				EventBus.loading = true;
+				return this.$store.dispatch('user/postLogin', {
+					email: this.email,
+					password: this.password
+				})
+				.then(() => {
+					EventBus.loading = false;
+					this.$router.push('/');
+				})
+				.catch((err) => {
+					console.log(`onClickLogin Error: ${err}`)
+				})
+			}
+		},
+		
+		computed: {
+			
 		}
+		
 	});
 </script>
 
