@@ -126,7 +126,7 @@
 			
 		},
 		
-		middleware:'isLogin'
+		middleware: ['onlyGuest']
 		
 	});
 </script>

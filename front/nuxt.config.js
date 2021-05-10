@@ -41,7 +41,8 @@ export default {
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
   axios: {
-		baseURL:'https://ytback.run.goorm.io/'
+		baseURL:'https://ytback.run.goorm.io/',
+		browserBaseURL:'https://ytback.run.goorm.io/'
 	},
 
   // Vuetify module configuration: https://go.nuxtjs.dev/config-vuetify
@@ -65,19 +66,26 @@ export default {
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {},
+	
   server: {
-	port: 3000,
+		port: 3000,
     host: '0.0.0.0'
   },
+	
   pageTransition: {
     name: 'page',
     mode: 'out-in',
     beforeEnter (el) {
       console.log(`Before enter...${el}`);
- 	}
+ 		}
   },
+	
   layoutTransition: {
     name: 'layout',
     mode: 'out-in'
-  }
+  },
+	
+	router: {
+		// middleware: 'fetchLogin'
+	}
 }

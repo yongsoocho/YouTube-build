@@ -12,15 +12,18 @@
 								   >
 					</v-avatar>
 					<v-card-title>
-						Name
+						{{user.name}}
 					</v-card-title>
-					<v-btn fab text color="grey">
+					<div :style="{ width:'200px' }">
+						<v-text-field clearable v-model="newName"></v-text-field>
+					</div>
+					<v-btn fab text color="blue" @click="onClickEditName">
 						<v-icon>mdi-pencil</v-icon>
 					</v-btn>
-					<v-spacer></v-spacer>
 					<v-card-subtitle>
-						email
+						{{user.email}}
 					</v-card-subtitle>
+					<v-spacer></v-spacer>
 				</v-card-title>
 				
 				<v-container>
@@ -56,16 +59,36 @@
 	import FavoriteVideo from "~/components/favoriteVideo.vue"
 	
 	export default Vue.extend({
+		
 		data() {
 			return {
-				tab:null
+				tab:null,
+				newName:''
 			}
 		},
 		
 		components: {
 			MyVideo,
 			FavoriteVideo
-		}
+		},
+		
+		computed: {
+			user() {
+				return this.$store.state.user.user;
+			}
+		},
+		
+		methods:{
+			onClickEditName() {
+				return this.$store.dispatch('user/editName', {
+					newName: this.newName,
+					email: this.user.email
+				})
+			}
+		},
+		
+		middleware: ['onlyMember']
+		
 	});
 </script>
 

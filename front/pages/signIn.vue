@@ -115,7 +115,9 @@
 		
 		computed: {
 			
-		}
+		},
+		
+		middleware: ['onlyGuest']
 		
 	});
 </script>

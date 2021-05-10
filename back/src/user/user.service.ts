@@ -12,8 +12,12 @@ export class UserService {
 		@InjectModel('User') private readonly userModel:Model<UserDocument>,
 	){}
 	
+	async findUserByEmail(email): Promise<any> {
+		const user = await this.userModel.findOne({ email: email });
+		return user;
+	}
 
-	async findUser(params): Promise<IUser> {
+	async findUser(params): Promise<any> {
 		try {
 			const { id } = params;
 			const user = await this.userModel.findOne({ _id: id });
@@ -73,22 +77,22 @@ export class UserService {
 	
 	
 	async logIn(body): Promise<any> {
-		try{
-			const { email, password } = body;
-			const user = await this.userModel.findOne({ email: email });
+		// try{
+		// 	const { email, password } = body;
+		// 	const user = await this.userModel.findOne({ email: email });
 
-			if(!user) { return new UnauthorizedException('Check your email') };
+		// 	if(!user) { return new UnauthorizedException('Check your email') };
 
-			const result = await bcrypt.compare(password, user.password);
-			if(!result) { return new UnauthorizedException('Check your password') };
+		// 	const result = await bcrypt.compare(password, user.password);
+		// 	if(!result) { return new UnauthorizedException('Check your password') };
 
-			const authJwtToken = jwt.sign({ email:user.email, name:user.name }, 'SecretKey');
-			let data = { jwt:null };
-			data.jwt = authJwtToken;
-			return data;
-		}catch(err) {
-			console.log(err);
-		}
+		// 	const authJwtToken = jwt.sign({ email:user.email, name:user.name }, 'SecretKey');
+		// 	let data = { jwt:null };
+		// 	data.jwt = authJwtToken;
+		// 	return data;
+		// }catch(err) {
+		// 	console.log(err);
+		// }
 	}
 	
 
@@ -98,5 +102,11 @@ export class UserService {
 		}catch(err) {
 			console.log(err);
 		}
+	}
+	
+	
+	async editName({ newName, email }): Promise<any> {
+		await this.userModel.updateOne({ email:email }, { $set: { name: newName } });
+		return;
 	}
 }

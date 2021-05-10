@@ -1,12 +1,39 @@
-import { Controller, Get, Post, Delete, Body, Param } from '@nestjs/common';
+import { Controller, Get, Post, Delete, Patch, Body, Param, Res, Req, UnauthorizedException } from '@nestjs/common';
 import { UserService } from './user.service';
 import { IUser } from './schemas/user.schema';
+import { Response, Request } from 'express';
+import * as bcrypt from 'bcrypt';
+import { JwtService } from '@nestjs/jwt';
 
 @Controller('user')
 export class UserController {
 	
-	constructor(private userService: UserService) {}
+	constructor(
+	private userService: UserService,
+	private jwtService: JwtService
+	) {}
+	
+	@Patch('/editname')
+	async editName(@Body() body): Promise<any> {
+		await this.userService.editName(body);
+		return { msg:'patch success' };
+	}
 
+	@Get('/')
+	async user(@Req() req: Request): Promise<any> {
+
+		const cookie = req.cookies['jwt'];
+		
+		const data = await this.jwtService.verifyAsync(cookie);
+		
+		if(!data) { throw new UnauthorizedException('Re Login is required') };
+		
+		const user = await this.userService.findUserByEmail(data.email);
+
+		const { _doc: {_id, password, __v, ...member } } = user;
+
+		return { member };
+	}
 
 	@Post('/sub/:id')
 	async subUser(
@@ -36,15 +63,31 @@ export class UserController {
 
 	@Post('/login')
 	async logIn(
-		@Body() body
+		@Body() body,
+		@Res({ passthrough: true }) res: Response
 	): Promise<any> {
-		return this.userService.logIn(body);
+		const user = await this.userService.findUserByEmail(body.email);
+		
+		if(!user) { throw new UnauthorizedException('User Not Found') };
+
+		const result = await bcrypt.compare(body.password, user.password);
+		
+		if(!result) { return new UnauthorizedException('Check your password') };
+		
+		const { _doc: {_id, password, __v, ...member } } = user;
+		
+		const jwt = await this.jwtService.signAsync({ email: member.email });
+
+		res.cookie('jwt', jwt, { httpOnly: true });
+
+		return { member };
 	}
 
 
 	@Get('/logout')
-	async logOut(): Promise<any> {
-		return this.userService.logOut();
+	async logOut(@Res({ passthrough:true }) res:Response): Promise<any> {
+		res.clearCookie('jwt');
+		return { msg: 'Log Out Success' }
 	}
 
 
