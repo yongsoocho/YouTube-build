@@ -87,5 +87,11 @@ export default {
 	
 	router: {
 		// middleware: 'fetchLogin'
-	}
+	},
+	
+	loading: {
+    color: '#2196F3',
+    height: '5px'
+  }
+
 }

@@ -13,6 +13,11 @@ export class UserController {
 	private jwtService: JwtService
 	) {}
 	
+	@Get('/test')
+	test() {
+		return console.log('testing..!!');
+	}
+	
 	@Patch('/editname')
 	async editName(@Body() body): Promise<any> {
 		await this.userService.editName(body);

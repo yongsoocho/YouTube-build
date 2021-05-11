@@ -25,7 +25,7 @@ export const mutations = {
 export const actions = {
 	
 	async postLogin({ commit }, payload) {
-		await this.$axios.post('/user/login', payload)
+		await this.$axios.post('/user/login', payload, { withCredentials: true })
 		.then((res) => {
 			// const Token = res.data.jwt;
 			// localStorage.setItem('Authorization', jwtToken);
@@ -37,7 +37,7 @@ export const actions = {
 	},
 	
 	async getLogout({ commit }) {
-		await this.$axios.get('/user/logout')
+		await this.$axios.get('/user/logout', { withCredentials: true })
 		.then(() => {
 			// localStorage.removeItem('Authorization');
 			commit('LOGOUT');
@@ -53,7 +53,7 @@ export const actions = {
 			email,
 			password,
 			name
-		}, { credentials:true })
+		}, { withCredentials:true })
 		.then(() => {
 			dispatch('postLogin', {
 				email,
@@ -71,7 +71,7 @@ export const actions = {
 		await this.$axios.patch('/user/editname', {
 			newName,
 			email
-		}, { credentials:true })
+		}, { withCredentials:true })
 		.then(() => {
 			commit('EDITNAME', {
 				newName

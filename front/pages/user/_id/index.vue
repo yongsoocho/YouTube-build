@@ -86,7 +86,7 @@
 				})
 			}
 		},
-		
+
 		middleware: ['onlyMember']
 		
 	});
