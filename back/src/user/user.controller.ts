@@ -26,12 +26,16 @@ export class UserController {
 
 	@Get('/')
 	async user(@Req() req: Request): Promise<any> {
-
+		
 		const cookie = req.cookies['jwt'];
+		
+		if(!cookie) { return { } };
 		
 		const data = await this.jwtService.verifyAsync(cookie);
 		
 		if(!data) { throw new UnauthorizedException('Re Login is required') };
+
+		console.log(data);
 		
 		const user = await this.userService.findUserByEmail(data.email);
 
@@ -81,7 +85,7 @@ export class UserController {
 		
 		const { _doc: {_id, password, __v, ...member } } = user;
 		
-		const jwt = await this.jwtService.signAsync({ email: member.email });
+		const jwt = await this.jwtService.signAsync({ email: member.email, name: member.name });
 
 		res.cookie('jwt', jwt, { httpOnly: true });
 

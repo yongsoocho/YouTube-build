@@ -5,6 +5,7 @@ import { GlobalModule } from './global/global.module';
 import { LoggerMiddleware } from './middleware/auth.middleware';
 import { UserController } from './user/user.controller';
 import { MongooseModule } from '@nestjs/mongoose';
+import { AuthModule } from './auth/auth.module';
 
 const URL = 'mongodb+srv://admin:0302@cluster0.xgmno.mongodb.net/test?retryWrites=true&w=majority'
 
@@ -15,7 +16,8 @@ const URL = 'mongodb+srv://admin:0302@cluster0.xgmno.mongodb.net/test?retryWrite
 						MongooseModule.forRoot(URL, { 
 							useFindAndModify:false, 
 							useCreateIndex:true 
-						})
+						}),
+						AuthModule
 					 ]
 })
 export class AppModule implements NestModule {
