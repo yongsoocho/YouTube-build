@@ -25,7 +25,7 @@ export const mutations = {
 export const actions = {
 	
 	async postLogin({ commit }, payload) {
-		await this.$axios.post('/user/login', payload, { withCredentials: true })
+		await this.$axios.post('/auth/login', payload, { withCredentials: true })
 		.then((res) => {
 			// const Token = res.data.jwt;
 			// localStorage.setItem('Authorization', jwtToken);
@@ -37,7 +37,7 @@ export const actions = {
 	},
 	
 	async getLogout({ commit }) {
-		await this.$axios.get('/user/logout', { withCredentials: true })
+		await this.$axios.get('/auth/logout', { withCredentials: true })
 		.then(() => {
 			// localStorage.removeItem('Authorization');
 			commit('LOGOUT');

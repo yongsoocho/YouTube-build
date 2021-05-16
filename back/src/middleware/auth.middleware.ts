@@ -10,6 +10,10 @@ export class LoggerMiddleware implements NestMiddleware {
 			
 			console.log(jwt);
 		}
+		if(req.user) {
+			
+			console.log(req.user);
+		}
 		next();
   }
 	
