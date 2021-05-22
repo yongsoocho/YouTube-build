@@ -48,7 +48,7 @@
 				
 					<v-card flat color="white" width="600" :style="{ marginTop:'15px' }">
 						<v-container>
-							<input type="file" @input.once="inputVideoFile" v-show="false" ref="AddVideo" />
+							<input type="file" @input.prevent="inputVideoFile" v-show="false" ref="AddVideo" />
 							
 							<v-btn text tile color="blue" large @click="onClickUploadVideo">upload video</v-btn>
 							
@@ -85,9 +85,9 @@
 				const file = e.target.files[0]
 				const videoFormData = new FormData();
 				videoFormData.append('video', file);
-				this.$store.dispatch('/video/uploadVideo', videoFormData)
+				this.$store.dispatch('video/uploadVideo', videoFormData)
 				.then(() => {
-					
+					console.log('!!');
 				})
 				.catch((err) => {
 					console.log(`video upload Error: ${err}`);
