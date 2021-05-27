@@ -4,7 +4,7 @@
 	
 	<v-col cols="12" md="8">
 		<v-container>
-			<v-img src="https://helpx.adobe.com/content/dam/help/en/photoshop/using/convert-color-image-black-white/jcr_content/main-pars/before_and_after/image-before/Landscape-Color.jpg"></v-img>
+			<video src="https://ytback.run.goorm.io/upload/abb5dbeb0982b89b8dec7eb496e401b9"></video>
 			<!-- -->
 			<div>
 				<span class="blue--text d-block">#Hash #Tags #Vue #Yongsoo</span>

@@ -1,4 +1,13 @@
-// export default async function ({ $axios, store }) {
-// 	const { member } = await $axios.get('/user', { withCredentials:true });
-// 	console.log(member);
-// }
+export default function (ctx) {
+	
+	if(process.client) {
+		console.log('process.client');
+		ctx.store.dispatch('user/reLogIn');
+	}
+	
+	if(process.server) {
+		console.log('process.server');
+		ctx.store.dispatch('user/reLogIn', ctx.req);
+	}
+	
+}

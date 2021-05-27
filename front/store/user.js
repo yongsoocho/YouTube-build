@@ -1,3 +1,5 @@
+import Cookie from 'js-cookie';
+
 export const state = () => ({
 	
 	user: null
@@ -7,8 +9,8 @@ export const state = () => ({
 export const mutations = {
 	
 	LOGIN(state, payload) {
-		const { member } = payload;
-		state.user = member;
+		const { jwt } = payload;
+		state.user = jwt;
 	},
 	
 	LOGOUT(state) {
@@ -27,24 +29,48 @@ export const actions = {
 	async postLogin({ commit }, payload) {
 		await this.$axios.post('/auth/login', payload, { withCredentials: true })
 		.then((res) => {
-			// const Token = res.data.jwt;
-			// localStorage.setItem('Authorization', jwtToken);
-			commit('LOGIN', { member: res.data.member });
+			console.log('postLogin::::')
+			const jwt = res.data.jwt;
+			localStorage.setItem('jwt', jwt);
+			Cookie.set('jwt', jwt);
+			commit('LOGIN', { jwt });
 		})
 		.catch((err) => {
 			console.log(`postLogin Error: ${err}`);
 		})
 	},
 	
+	async reLogIn(vueCtx, req) {
+		if(req) {
+			if(!req.headers.cookie) { return; }
+			const jwtCookie = req.headers.cookie
+																		.split(';')
+																		.find(c => c.trim().startsWith('jwt='));
+			
+			console.log('jwtCookie ::', jwtCookie)
+			if(!jwtCookie) { return; }
+			const jwt = jwtCookie.split('=')[1];
+			vueCtx.commit("LOGIN", { jwt });
+		} else {
+			const jwt = localStorage.getItem('jwt');
+
+			if(!jwt) { return; }
+			console.log('NON req::::');
+			vueCtx.commit("LOGIN", { jwt });
+		}
+	},
+	
 	async getLogout({ commit }) {
-		await this.$axios.get('/auth/logout', { withCredentials: true })
-		.then(() => {
-			// localStorage.removeItem('Authorization');
-			commit('LOGOUT');
-		})
-		.catch((err) => {
-			console.log(`getLogout Error: ${err}`)
-		});
+		// await this.$axios.get('/auth/logout', { withCredentials: true })
+		// .then(() => {
+		// 	commit('LOGOUT');
+		// })
+		// .catch((err) => {
+		// 	console.log(`getLogout Error: ${err}`)
+		// });
+		localStorage.removeItem('jwt');
+		Cookie.remove('jwt');
+		commit('LOGOUT');
 	},
 	
 	async postSignUp({ commit, dispatch }, payload) {

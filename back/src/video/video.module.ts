@@ -6,6 +6,8 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { VideoSchema } from './schemas/video.schema';
 import { CommentSchema } from './schemas/comment.schema';
 
+import { MulterModule } from '@nestjs/platform-express';
+
 @Module({
 	imports: [
 		MongooseModule.forFeature(
@@ -18,6 +20,9 @@ import { CommentSchema } from './schemas/comment.schema';
 				{ name: 'Comment', schema: CommentSchema },
 			]
 		),
+		// MulterModule.register({
+			
+		// })
 	],
 	controllers: [VideoController],
   providers: [VideoService]

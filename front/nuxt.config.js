@@ -86,7 +86,7 @@ export default {
   },
 	
 	router: {
-		// middleware: 'fetchLogin'
+		middleware: 'fetchLogin'
 	},
 	
 	loading: {

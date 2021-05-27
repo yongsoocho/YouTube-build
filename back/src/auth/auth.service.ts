@@ -20,7 +20,7 @@ export class AuthService {
 		
 		if(!result) { return new UnauthorizedException('Check your password') };
 		
-		const { _doc: {_id, password, ...member } } = user; 
+		const { _doc: { password, ...member } } = user; 
 		
 		const jwt = await this.jwtService.sign(member);
 		

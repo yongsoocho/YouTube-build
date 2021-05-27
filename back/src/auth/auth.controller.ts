@@ -22,7 +22,7 @@ export class AuthController {
 
 		res.cookie('jwt', jwt, { httpOnly: true });
 		
-		return { jwt, member };
+		return { jwt };
 	}
 	
 	@Post('/test')
