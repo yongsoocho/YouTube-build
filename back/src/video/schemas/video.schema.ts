@@ -27,6 +27,12 @@ export const VideoSchema = new mongoose.Schema({
 	
 	comments: [CommentSchema],
 	
+	genre: [{
+		type: String
+	}],
+	
+	hashtag: [String],
+	
 	likeUsers: [{
 		type: mongoose.Types.ObjectId,
 		ref: 'User'
@@ -43,9 +49,11 @@ export const VideoSchema = new mongoose.Schema({
 export interface IVideo {
 	title:string;
 	description:string;
-	author:{ _id:string; name:string; };
-	myVideo:IVideo[];
-	favoriteVideo:Array<IVideo>;
+	author: string ;
+	views: number;
+	comments: any;
+	likeUsers: Array<string>;
+	dislikeUsers: Array<string>;
 };
 
 

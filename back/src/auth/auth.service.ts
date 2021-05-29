@@ -26,5 +26,11 @@ export class AuthService {
 		
 		return { jwt, member };
 	}
+		
+	
+	async reLogIn(jwt): Promise<any> {
+		const member = await this.jwtService.verify(jwt);
+		return member;
+	}
 	
 }

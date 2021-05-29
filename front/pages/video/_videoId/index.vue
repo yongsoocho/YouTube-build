@@ -4,16 +4,18 @@
 	
 	<v-col cols="12" md="8">
 		<v-container>
-			<video src="https://ytback.run.goorm.io/upload/abb5dbeb0982b89b8dec7eb496e401b9"></video>
+			<video class="video" controls preload="auto" type="video/mp4">
+				<source :src=`https://ytback.run.goorm.io/upload/${VideoInfo._id}` type="video/mp4">
+			</video>
 			<!-- -->
 			<div>
-				<span class="blue--text d-block">#Hash #Tags #Vue #Yongsoo</span>
-				<span id="VideoTitle" class="black--text d-block">Video Title</span>
+				<span class="blue--text d-block">{{VideoInfo.hashtag}}</span>
+				<span id="VideoTitle" class="black--text d-block">{{VideoInfo.title}}</span>
 			</div>
 			<!-- -->
 			<div :style="{ display:'flex' }">
 				<div>
-					<span class="grey--text">view & day ago</span>
+					<span class="grey--text">{{VideoInfo.createdAt}}</span>
 				</div>
 				
 				<v-spacer></v-spacer>
@@ -69,10 +71,10 @@
 			
 			<div :style="{ marginLeft:'59px', marginTop:'20px' }">
 				<p v-show="!descriptToggle" class="black--text">
-					{{description.slice(0,13)}}
+					{{VideoInfo.description.slice(0,13)}}
 				</p>
 				<p v-show="descriptToggle" class="black--text">
-					{{description}}
+					{{VideoInfo.description}}
 				</p>
 				<v-btn color="blue" small text tile @click="onClickDescriptToggle" :style="{ marginBottom:'20px' }">show more</v-btn>
 			</div>
@@ -112,29 +114,29 @@
 						replies:[1,1,1]
 					},
 					{
-						id:1,
+						id:2,
 						replies:[1,1,1]
 					},
 					{
-						id:1,
+						id:3,
 						replies:[1,1,1]
 					},
 					{
-						id:1,
+						id:4,
 						replies:[1,1,1]
 					},
 					{
-						id:1,
+						id:5,
 						replies:[1,1,1]
 					}
 				],
 				descriptToggle:false,
 				scriptToggle:false,
-				description:'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
 			}
 		},
 		
 		methods: {
+			
 			onClickScriptToggle() {
 				if(!this.scriptToggle) {
 					return this.scriptToggle = true;
@@ -142,6 +144,7 @@
 					return this.scriptToggle = false;
 				}
 			},
+			
 			onClickDescriptToggle() {
 				if(!this.descriptToggle) {
 					return this.descriptToggle = true;
@@ -149,7 +152,22 @@
 					return this.descriptToggle = false;
 				}
 			},
+			
+		},
+		
+		asyncData(ctx) {
+			const { videoId } = ctx.params;
+			
+			ctx.store.dispatch('video/findVideoById', { videoId });
+		},
+		
+		computed: {
+			VideoInfo() {
+				return this.$store.state.video.VideoInfo;
+			}
 		}
+			
+		
 	});
 </script>
 
@@ -163,5 +181,9 @@
 	}
 	.likeToggleGrey {
 		color:#9E9E9E;
+	}
+	.video {
+		width: 100%;
+  	height: auto;
 	}
 </style>

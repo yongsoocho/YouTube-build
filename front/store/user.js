@@ -9,8 +9,13 @@ export const state = () => ({
 export const mutations = {
 	
 	LOGIN(state, payload) {
-		const { jwt } = payload;
-		state.user = jwt;
+		const { member, jwt } = payload;
+		if(member) {
+			state.user = member;
+		}
+		if(jwt) {
+			state.user = jwt;
+		}
 	},
 	
 	LOGOUT(state) {
@@ -26,14 +31,32 @@ export const mutations = {
 
 export const actions = {
 	
+	async jwtLogIn({ commit, state }) {
+		if(state.user) {
+			const jwt = state.user;
+			
+			await this.$axios.post('/auth/relogin', { jwt }, { withCredentials:true })
+			.then((res) => {
+				const { member } = res.data;
+				commit("LOGIN", { member });
+			})
+			.catch((err) => {
+				console.log(`jwtLogIn Error in Action: ${err}`);
+			})
+		}
+	},
+	
+	
 	async postLogin({ commit }, payload) {
 		await this.$axios.post('/auth/login', payload, { withCredentials: true })
 		.then((res) => {
-			console.log('postLogin::::')
-			const jwt = res.data.jwt;
+			const { jwt, member } = res.data;
+			
 			localStorage.setItem('jwt', jwt);
+			
 			Cookie.set('jwt', jwt);
-			commit('LOGIN', { jwt });
+			
+			commit('LOGIN', { member });
 		})
 		.catch((err) => {
 			console.log(`postLogin Error: ${err}`);
@@ -41,22 +64,51 @@ export const actions = {
 	},
 	
 	async reLogIn(vueCtx, req) {
+		const user = vueCtx.state.user;
+		
+		if(user) { return; }
+			 
 		if(req) {
 			if(!req.headers.cookie) { return; }
+			
 			const jwtCookie = req.headers.cookie
 																		.split(';')
 																		.find(c => c.trim().startsWith('jwt='));
 			
-			console.log('jwtCookie ::', jwtCookie)
 			if(!jwtCookie) { return; }
+			
 			const jwt = jwtCookie.split('=')[1];
+			
 			vueCtx.commit("LOGIN", { jwt });
+			// await this.$axios.post('/auth/relogin', { jwt }, { withCredentials: true })
+			// .then((res) => {
+			// 	const member = res.data.member;
+			// 	vueCtx.commit("LOGIN", { member });
+			// 	if(!member) {
+			// 		return console.log('NOT FOUND USER ON REQ');
+			// 	}
+			// })
+			// .catch((err) => {
+			// 	console.log(`reLogIn request Error: ${err}`);
+			// })
 		} else {
 			const jwt = localStorage.getItem('jwt');
 
 			if(!jwt) { return; }
-			console.log('NON req::::');
+			
 			vueCtx.commit("LOGIN", { jwt });
+			// await this.$axios.post('/auth/relogin', { jwt }, { withCredentials: true })
+			// .then((res) => {
+			// 	const { member } = res.data.member;
+			// 	console.log('relogin success on localStorage');
+			// 	vueCtx.commit("LOGIN", { member });	
+			// 	if(!member) {
+			// 		return console.log('NOT FOUND USER ON LOCALSTORAGE');
+			// 	}
+			// })
+			// .catch((err) => {
+			// 	console.log(`reLogIn localStorage Error: ${err}`);
+			// })
 		}
 	},
 	

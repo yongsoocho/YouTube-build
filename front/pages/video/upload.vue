@@ -5,16 +5,9 @@
 	<v-col cols="12" md="8">
 		
 		<v-container>
-			<iframe
-							width="1280"
-							height="720"
-							src="https://www.youtube.com/embed/ioNng23DkIM"
-							title="YouTube video player"
-							frameborder="0"
-							allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-							allowfullscreen
-							>
-			</iframe>
+			<video v-if="videoURL" class="video" controls preload="auto" type="video/mp4">
+				<source :src="videoURL" type="video/mp4">
+			</video>
 			
 			<v-form>
 					<v-card flat color="white" width="600">
@@ -24,24 +17,28 @@
 														clearable
 														color="blue"
 														placeholder="Title"
+														v-model="title"
 														></v-text-field>
 							<v-text-field 
 														light
 														clearable
 														color="blue"
 														placeholder="Description"
+														v-model="description"
 														></v-text-field>
 							<v-text-field 
 														light
 														clearable
 														color="blue"
 														placeholder="Hashtag"
+														v-model="hashtag"
 														></v-text-field>
 							<v-text-field 
 														light
 														clearable
 														color="blue"
 														placeholder="Genre"
+														v-model="genre"
 														></v-text-field>
 						</v-container>
 					</v-card>
@@ -52,7 +49,16 @@
 							
 							<v-btn text tile color="blue" large @click="onClickUploadVideo">upload video</v-btn>
 							
-							<v-btn outlined tile color="blue" large :style="{ marginLeft:'30px' }">done</v-btn>
+							<v-btn 
+										 outlined 
+										 tile 
+										 color="blue" 
+										 large 
+										 :style="{ marginLeft:'30px' }" 
+										 @click="onClickUploadPost" 
+										 :disabled="!videoURL">
+								done
+							</v-btn>
 						</v-container>
 					</v-card>
 			</v-form>
@@ -70,12 +76,11 @@
 	export default Vue.extend({
 		data () {
     		return {
-      		e1: 1,
 					title:'',
 					description:'',
 					genre:'',
 					hashtag:'',
-					continueBtn:true
+					videoURL:'',
     		}
   		},
 		
@@ -83,11 +88,15 @@
 			
 			inputVideoFile(e) {
 				const file = e.target.files[0]
+				
 				const videoFormData = new FormData();
+				
 				videoFormData.append('video', file);
-				this.$store.dispatch('video/uploadVideo', videoFormData)
-				.then(() => {
-					console.log('!!');
+				
+				this.$axios.post('/video/upload', videoFormData, { withCredentials:true })
+				.then((res) => {
+					const url = res.data.url;
+					this.videoURL = url
 				})
 				.catch((err) => {
 					console.log(`video upload Error: ${err}`);
@@ -96,13 +105,63 @@
 			
 			onClickUploadVideo() {
 				this.$refs.AddVideo.click();
+			},
+			
+			
+			onClickUploadPost() {
+				const genre = this.genre.split(' ');
+				
+				const hashtag = this.hashtag
+				.split('#')
+				.splice(0, 1);
+				
+				for(let i in hashtag) {
+					hashtag[i] = '#' + hashtag[i];
+				}
+				
+				this.$axios.post('/video/uploadpost', {
+					title: this.title,
+					description: this.description,
+					author: this.user._id,
+					genre: genre,
+					hashtag: hashtag,
+					videoURL: this.videoURL
+				}, { withCredentials:true })
+				.then((res) => {
+					const { redirectURL } = res.data;
+					this.$router.push({
+						path: redirectURL
+					})
+				})
+				.catch((err) => {
+					console.log(`post upload Error: ${err}`);
+				})
 			}
 			
+		},
+		
+		asyncData({ store }) {
+      store.dispatch('user/jwtLogIn')
+			// .then(() => {
+			// 	return;
+			// })
+			// .catch((err) => {
+			// 	console.log(`asyncData Error: ${err}`)
+			// })
+    },
+		
+		computed: {
+			user() {
+				return this.$store.state.user.user;
+			}
 		}
 		
 	});
 </script>
 
 <style scoped>
-	
+	.video {
+		width: 100%;
+  	height: auto;
+	}
 </style>

@@ -20,22 +20,23 @@ export class AuthController {
 
 		if(!jwt || !member) { throw new UnauthorizedException('Login Error') }
 
-		res.cookie('jwt', jwt, { httpOnly: true });
+		// res.cookie('jwt', jwt, { httpOnly: true });
 		
-		return { jwt };
-	}
-	
-	@Post('/test')
-	@UseGuards(AuthGuard())
-	async test(@GetUser() user) {
-		console.log(user);
-		return user;
+		return { jwt, member };
 	}
 
+	// @Get('/logout')
+	// async logOut(@Res({ passthrough: true }) res:Response): Promise<any> {
+	// 	return res.clearCookie('jwt');
+	// }
 
-	@Get('/logout')
-	async logOut(@Res({ passthrough: true }) res:Response): Promise<any> {
-		return res.clearCookie('jwt');
+	@Post('/relogin')
+	async reLogIn(
+		@Body('jwt') jwt
+	): Promise<any> {
+		if(!jwt) { return; }
+		const member = await this.authService.reLogIn(jwt);
+		return { member };
 	}
 
 
